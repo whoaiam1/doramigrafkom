@@ -582,10 +582,6 @@ namespace Pert1
                 i._model *= Matrix4.CreateTranslation(0, y, 0);
             }
         }
-        public void translateAll(float x, float y, float z)
-        {
-            _model *= Matrix4.CreateTranslation(x, y, z);
-        }
 
         public void translateObject(float x, float y, float z)
         {
