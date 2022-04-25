@@ -59,14 +59,22 @@ namespace Pert1
         //int _elementBufferObject;
         //Shader _shader;
         Asset3d[] _object3d = new Asset3d[20];
-        Asset3d body;
-        Asset3d main_head;
+        Asset3d bodyDorami;
+        Asset3d main_headDorami;
         Asset3d cone;
-        Asset3d right_hand;
-        Asset3d left_hand;
-        Asset3d right_foot;
-        Asset3d left_foot;
+        Asset3d right_handDorami;
+        Asset3d left_handDorami;
+        Asset3d right_footDorami;
+        Asset3d left_footDorami;
         Asset3d cam = new Asset3d();
+        Camera _camera;
+        bool _firstMove = true;
+        Vector2 _lastPos;
+        Vector3 _objectPos = new Vector3(0.0f, 0.0f, 0.0f);
+        float _rotationSpeed = 1;
+
+        Asset3d dorami = new Asset3d();
+
         float degree = 0;
         double _time = 0;
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
@@ -74,30 +82,18 @@ namespace Pert1
 
         }
 
-        public void makeBody()
+        public void makebodyDorami()
         {
             //Ganti Background
-            GL.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            GL.ClearColor(0f, 0f, 0f, 1.0f);
             _object3d[0] = new Asset3d();
-            body = new Asset3d();
+            bodyDorami = new Asset3d();
 
             //Badan
             _object3d[0] = new Asset3d();
             _object3d[0].createEllipsoid2(0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 300, 100);
             _object3d[0].setColor(new Vector3(255, 228, 59));
-            body.addChildClass(_object3d[0]);
-
-            //Outline bg kantong
-            //_object3d[1] = new Asset3d();
-            //_object3d[1].createEllipsoid2(0.42f, 0.40f, 0.30f, 0.0f, 0.0f, 0.2f, 300, 100);
-            //_object3d[1].setColor(new Vector3(0, 0, 0));
-            //body.addChildClass(_object3d[1]);
-
-            //bg kantong
-            //_object3d[2] = new Asset3d();
-            //_object3d[2].createEllipsoid2(0.40f, 0.38f, 0.25f, 0.0f, 0.0f, 0.25f, 300, 100);
-            //_object3d[2].setColor(new Vector3(255, 255, 255));
-            //body.addChildClass(_object3d[2]);
+            bodyDorami.addChildClass(_object3d[0]);
 
             //Outline Kantong
             _object3d[3] = new Asset3d();
@@ -105,7 +101,7 @@ namespace Pert1
             _object3d[3].rotate(_object3d[0]._center, _object3d[0]._euler[2], 180);
             _object3d[3].rotate(_object3d[0]._center, _object3d[0]._euler[0], 10);
             _object3d[3].setColor(new Vector3(0, 0, 0));
-            body.addChildClass(_object3d[3]);
+            bodyDorami.addChildClass(_object3d[3]);
 
             //kantong
             _object3d[4] = new Asset3d();
@@ -113,266 +109,199 @@ namespace Pert1
             _object3d[4].rotate(_object3d[0]._center, _object3d[0]._euler[2], 180);
             _object3d[4].rotate(_object3d[0]._center, _object3d[0]._euler[0], 15);
             _object3d[4].setColor(new Vector3(255, 255, 255));
-            body.addChildClass(_object3d[4]);
+            bodyDorami.addChildClass(_object3d[4]);
 
             //kalung lonceng
             _object3d[5] = new Asset3d();
             _object3d[5].createEllipsoid2(0.5f, 0.08f, 0.5f, 0.0f, 0.29f, 0.0f, 300, 100);
             _object3d[5].setColor(new Vector3(2, 160, 231));
-            body.addChildClass(_object3d[5]);
+            bodyDorami.addChildClass(_object3d[5]);
 
 
             //bg lonceng
             _object3d[6] = new Asset3d();
             _object3d[6].createEllipsoid2(0.11f, 0.01f, 0.11f, 0.0f, 0.19f, 0.55f, 300, 100);
             _object3d[6].setColor(new Vector3(255, 165, 0));
-            body.addChildClass(_object3d[6]);
+            bodyDorami.addChildClass(_object3d[6]);
 
             //Lonceng
             _object3d[7] = new Asset3d();
             _object3d[7].createEllipsoid2(0.1f, 0.1f, 0.1f, 0.0f, 0.19f, 0.55f, 300, 100);
             _object3d[7].setColor(new Vector3(255, 255, 0));
-            body.addChildClass(_object3d[7]);
-
-            ////kalung lonceng
-            //_object3d[5] = new Asset3d();
-            //_object3d[5].createEllipsoid2(0.5f, 0.08f, 0.5f, 0.0f, 0.29f, 0.0f, 300, 100);
-            //_object3d[5].setColor(new Vector3(255, 0, 0));
-            //body.addChildClass(_object3d[5]);
-
-
-            //_object3d[5] = new Asset3d();
-            //_object3d[5].EllipCone(0.1f, 0.1f, 0.1f, 0.9f, 0, 0);
-            //_object3d[5].setColor(new Vector3(255, 0, 0));
-            //body.addChildClass(_object3d[5]);
-
-            //_object3d[5] = new Asset3d();
-            //_object3d[5].createEllipsoid2(0.03f, 0.05f, 0.1f, -0.7f, 0.29f, 0.0f, 300, 100);
-            //_object3d[5].setColor(new Vector3(255, 0, 0));
-            //body.addChildClass(_object3d[5]);
-
-            //bg lonceng
-            //_object3d[6] = new Asset3d();
-            //_object3d[6].createEllipsoid2(0.11f, 0.01f, 0.11f, 0.0f, 0.19f, 0.55f, 300, 100);
-            //_object3d[6].setColor(new Vector3(255, 165, 0));
-            //body.addChildClass(_object3d[6]);
-
-            ////Hem baju
-            //_object3d[1] = new Asset3d();
-            //                                        //x   //z   //y
-            //_object3d[1].EllipCone(0.14f, 0.02f, 0.15f, 0f, -0.5f, -0.1f);
-            //_object3d[1].setColor(new Vector3(0, 0, 0));
-            //_object3d[1].rotate(_object3d[0]._center, _object3d[0]._euler[0], -105);
-            //_object3d[1].rotate(_object3d[0]._center, _object3d[0]._euler[1], 0);
-
-            //body.addChildClass(_object3d[1]);
-
-            ////Hem baju
-            //_object3d[1] = new Asset3d();
-            //                                        //x   //z   //y
-            //_object3d[1].EllipCone(0.1f, 0.01f, 0.145f, 0f, -0.51f, -0.05f);
-            //_object3d[1].setColor(new Vector3(255, 255, 255));
-            //_object3d[1].rotate(_object3d[0]._center, _object3d[0]._euler[0], -100);
-            ////_object3d[1].rotate(_object3d[0]._center, _object3d[0]._euler[1], 25);
-
-            //body.addChildClass(_object3d[1]);
-
-            ////Lonceng
-            //_object3d[7] = new Asset3d();
-            //_object3d[7].createEllipsoid2(0.03f, 0.03f, 0.03f, 0.0f, 0.3f, 0.55f, 300, 100);
-            //_object3d[7].setColor(new Vector3(171, 57, 96));
-            //body.addChildClass(_object3d[7]);
-
-            //_object3d[7] = new Asset3d();
-            //_object3d[7].EllipCone(0.03f, 0.05f, 0.1f, -0.55f, 0.30f, 0f);
-            //_object3d[7].setColor(new Vector3(171, 57, 96));
-            //_object3d[7].rotate(_object3d[0]._center, _object3d[0]._euler[1], 90);
-            //body.addChildClass(_object3d[7]);
-
-            //_object3d[7] = new Asset3d();
-            //_object3d[7].EllipCone(0.03f, 0.05f, 0.1f, 0.55f, 0.30f, 0f);
-            //_object3d[7].setColor(new Vector3(171, 57, 96));
-            //_object3d[7].rotate(_object3d[0]._center, _object3d[0]._euler[1], -90);
-            //body.addChildClass(_object3d[7]);
-
-
+            bodyDorami.addChildClass(_object3d[7]);
         }
 
-        public void makeHead()
+        public void makeHeadDorami()
         {
-            main_head = new Asset3d();
-            //main_head.createElipseoid(0.5f, 0.45f, 0.4f, 0.5f, 0.5f, 0.5f);
-            main_head.createEllipsoid2(0.5f, 0.45f, 0.5f, 0.0f, 0.0f, 0.0f, 300, 100);
-            main_head.setColor(new Vector3(253, 229, 63));
+            main_headDorami = new Asset3d();
+            //main_headDorami.createElipseoid(0.5f, 0.45f, 0.4f, 0.5f, 0.5f, 0.5f);
+            main_headDorami.createEllipsoid2(0.5f, 0.45f, 0.5f, 0.0f, 0.0f, 0.0f, 300, 100);
+            main_headDorami.setColor(new Vector3(253, 229, 63));
 
             Asset3d eyes = new Asset3d();
 
-            eyes.createEllipsoid2(0.1f, 0.15f, 0.1f, -0.1f, 0.05f, 0.4f, 300, 100);
+            eyes.createEllipsoid2(0.1f, 0.12f, 0.1f, -0.15f, 0.02f, 0.43f, 300, 100);
             eyes.setColor(new Vector3(255.0f, 255.0f, 255.0f));
-            main_head.addChildClass(eyes);
+            main_headDorami.addChildClass(eyes);
 
             eyes = new Asset3d();
-            eyes.createEllipsoid2(0.1f, 0.15f, 0.1f, 0.1f, 0.05f, 0.4f, 300, 100);
+            eyes.createEllipsoid2(0.1f, 0.12f, 0.1f, 0.15f, 0.02f, 0.43f, 300, 100);
             eyes.setColor(new Vector3(255.0f, 255.0f, 255.0f));
-            main_head.addChildClass(eyes);
+            main_headDorami.addChildClass(eyes);
 
             eyes = new Asset3d();
-            eyes.createEllipsoid2(0.1f / 3f, 0.15f / 3f, 0.05f / 3f, 0.10f, 0.05f, 0.5f, 300, 100);
+            eyes.createEllipsoid2(0.1f / 3f, 0.15f / 3f, 0.05f / 3f, 0.15f, 0f, 0.53f, 300, 100);
             eyes.setColor(new Vector3(0.0f, 0.0f, 0.0f));
-            main_head.addChildClass(eyes);
+            main_headDorami.addChildClass(eyes);
+
 
             eyes = new Asset3d();
-            eyes.createEllipsoid2(0.1f / 3f, 0.15f / 3f, 0.05f / 3f, -0.10f, 0.05f, 0.5f, 300, 100);
+            eyes.createEllipsoid2(0.1f / 3f, 0.15f / 3f, 0.05f / 3f, -0.15f, 0f, 0.53f, 300, 100);
             eyes.setColor(new Vector3(0.0f, 0.0f, 0.0f));
-            main_head.addChildClass(eyes);
+            main_headDorami.addChildClass(eyes);
             Asset3d cheek = new Asset3d();
             Asset3d smile = new Asset3d();
             Asset3d nose = new Asset3d();
-            cheek.createEllipsoid2(0.35f, 0.23f, 0.05f, 0.0f, 0.05f, 0.44f, 300, 100);
-            cheek.setColor(new Vector3(255f, 255f, 255f));
-            cheek.rotate(main_head._center, main_head._euler[0], 35);
+            cheek.createEllipsoid2(0.35f, 0.3f, 0.1f, 0.0f, -0.05f, 0.42f, 300, 100);
+            cheek.setColor(new Vector3(240f, 240f, 240f));
 
-            nose.createEllipsoid2(0.075f, 0.055f, 0.075f, 0.0f, -0.1f, 0.45f, 300, 100);
+            nose.createEllipsoid2(0.055f, 0.035f, 0.055f, 0.0f, -0.1f, 0.48f, 300, 100);
             nose.setColor(new Vector3(251, 207, 208));
 
-            smile.createHalfBall(0.2f, 0.15f, 0f, 0.0f, -0.1f, 0.5f, 800, 2000);
+            smile.createHalfBall(0.1f, 0.12f, 0f, 0.0f, 0.01f, 0.545f, 800, 2000);
             smile.setColor(new Vector3(255f, 0f, 0f));
-            smile.rotate(main_head._center, main_head._euler[2], 180);
-            smile.rotate(main_head._center, main_head._euler[0], 35);
-            main_head.addChildClass(smile);
-            //main_head.addChildClass(cheek);
-            main_head.addChildClass(nose);
-            //Asset3d mustache;
-            ////Right Mustache
-            //mustache = new Asset3d();
-            //mustache.EllipPara(0.01f / 9f, 0.01f / 9f, 0.004f, -0.52f, -0.12f, 0.1f);
-            //mustache.setColor(new Vector3(0, 0, 0));
-            //mustache.rotate(main_head._center, mustache._euler[1], 90);
-            //mustache.rotate(main_head._center, mustache._euler[0], -15);
-            //main_head.addChildClass(mustache);
-
-            //mustache = new Asset3d();
-            //mustache.EllipPara(0.01f / 9f, 0.01f / 9f, 0.004f, -0.5f, -0.12f, 0.1f);
-            //mustache.setColor(new Vector3(0, 0, 0));
-            //mustache.rotate(main_head._center, mustache._euler[1], 90);
-            //main_head.addChildClass(mustache);
-
-            //mustache = new Asset3d();
-            //mustache.EllipPara(0.01f / 9f, 0.01f / 9f, 0.004f, -0.5f, -0.12f, 0.15f);
-            //mustache.setColor(new Vector3(0, 0, 0));
-            //mustache.rotate(main_head._center, mustache._euler[1], 90);
-            //mustache.rotate(main_head._center, mustache._euler[0], 15);
-            //main_head.addChildClass(mustache);
-
-            ////Left Mustache
-            //mustache = new Asset3d();
-            //mustache.EllipPara(0.01f / 9f, 0.01f / 9f, 0.004f, 0.49f, -0.12f, 0.13f);
-            //mustache.setColor(new Vector3(0, 0, 0));
-            //mustache.rotate(main_head._center, mustache._euler[1], -90);
-            //mustache.rotate(main_head._center, mustache._euler[0], 15);
-            //main_head.addChildClass(mustache);
-
-            //mustache = new Asset3d();
-            //mustache.EllipPara(0.01f / 9f, 0.01f / 9f, 0.004f, 0.5f, -0.12f, 0.1f);
-            //mustache.setColor(new Vector3(0, 0, 0));
-            //mustache.rotate(main_head._center, mustache._euler[1], -90);
-            //main_head.addChildClass(mustache);
-
-            //mustache = new Asset3d();
-            //mustache.EllipPara(0.01f / 9f, 0.01f / 9f, 0.004f, 0.52f, -0.12f, 0.08f);
-            //mustache.setColor(new Vector3(0, 0, 0));
-            //mustache.rotate(main_head._center, mustache._euler[1], -90);
-            //mustache.rotate(main_head._center, mustache._euler[0], -15);
-            //main_head.addChildClass(mustache);
-
-            //mustache = new Asset3d();
-            //mustache.EllipPara(0.01f / 9f, 0.01f / 15f, 0.0014f, 0f, 0.53f, -0.115f);
-            //mustache.setColor(new Vector3(0, 0, 0));
-            //mustache.rotate(main_head._center, mustache._euler[0], 110);
-            //main_head.addChildClass(mustache);
-
+            smile.rotate(main_headDorami._center, main_headDorami._euler[2], 180);
+            smile.rotate(main_headDorami._center, main_headDorami._euler[0], 15);
+            main_headDorami.addChildClass(smile);
+            main_headDorami.addChildClass(cheek);
+            main_headDorami.addChildClass(nose);
             Asset3d ears;
             //right ear
             ears = new Asset3d();
             ears.EllipPara(0.021f, 0.021f, 0.004f, -0.07f, 0f, -0.76f);
-            ears.rotate(main_head._center, ears._euler[0], 90);
-            ears.rotate(main_head._center, ears._euler[1], 15);
+            ears.rotate(main_headDorami._center, ears._euler[0], 90);
+            ears.rotate(main_headDorami._center, ears._euler[1], 15);
             ears.setColor(new Vector3(225, 0, 42));
-            main_head.addChildClass(ears);
+            main_headDorami.addChildClass(ears);
             //left ear
             ears = new Asset3d();
             ears.EllipPara(0.021f, 0.021f, 0.004f, 0.07f, 0f, -0.76f);
-            ears.rotate(main_head._center, ears._euler[0], 90);
-            ears.rotate(main_head._center, ears._euler[1], -15);
+            ears.rotate(main_headDorami._center, ears._euler[0], 90);
+            ears.rotate(main_headDorami._center, ears._euler[1], -15);
             ears.setColor(new Vector3(225, 0, 42));
-            main_head.addChildClass(ears);
-
-            ////inner right ear
-            //ears = new Asset3d();
-            //ears.EllipPara(0f, 0.021f / 1.5f, 0.004f, 0.3193f, -0.1f, -0.58f);
-            //ears.rotate(main_head._center, ears._euler[0], 70);
-            //ears.rotate(main_head._center, ears._euler[1], -15);
-            //ears.rotate(main_head._center, ears._euler[2], 90);
-            //ears.setColor(new Vector3(210, 210, 183));
-            //main_head.addChildClass(ears);
-            ////inner left ear
-            //ears = new Asset3d();
-            //ears.EllipPara(0f, 0.021f / 1.5f, 0.004f, 0.3193f, 0.1f, -0.58f);
-            //ears.rotate(main_head._center, ears._euler[0], 70);
-            //ears.rotate(main_head._center, ears._euler[1], 15);
-            //ears.rotate(main_head._center, ears._euler[2], 90);
-            //ears.setColor(new Vector3(210, 210, 183));
-            //main_head.addChildClass(ears);
+            main_headDorami.addChildClass(ears);
         }
 
-        public void makeHand()
+        public void makeHandDorami()
         {
             //right hand
-            right_hand = new Asset3d();
-            right_hand.createEllipsoid2(0.12f, 0.12f, 0.12f, 0.55f, -0.3f, 0.0f, 300, 100);
-            right_hand.setColor(new Vector3(211, 211, 211));
+            right_handDorami = new Asset3d();
+            right_handDorami.createEllipsoid2(0.12f, 0.12f, 0.12f, 0.55f, 0.3f, 0.0f, 300, 100);
+            right_handDorami.setColor(new Vector3(211, 211, 211));
             //right arm
             Asset3d arm = new Asset3d();
             arm.EllipPara(0.011f, 0.011f, 0.004f, 0.45f, 0f, 0f);
             arm.setColor(new Vector3(255, 200, 59));
-            arm.rotate(right_hand._center, arm._euler[0], 90);
-            arm.rotate(right_hand._center, arm._euler[1], 15);
-            right_hand.addChildClass(arm);
+            arm.rotate(right_handDorami._center, arm._euler[0], 270);
+            arm.rotate(right_handDorami._center, arm._euler[1], 15);
+            right_handDorami.addChildClass(arm);
 
             //left hand
-            left_hand = new Asset3d();
-            left_hand.createEllipsoid2(0.12f, 0.12f, 0.12f, -0.55f, -0.3f, 0.0f, 300, 100);
-            left_hand.setColor(new Vector3(211, 211, 211));
+            left_handDorami = new Asset3d();
+            left_handDorami.createEllipsoid2(0.12f, 0.12f, 0.12f, -0.55f, -0.3f, 0.0f, 300, 100);
+            left_handDorami.setColor(new Vector3(211, 211, 211));
             //left arm
             arm = new Asset3d();
             arm.EllipPara(0.011f, 0.011f, 0.004f, -0.45f, 0f, 0f);
             arm.setColor(new Vector3(255, 200, 59));
-            arm.rotate(right_hand._center, arm._euler[0], 90);
-            arm.rotate(right_hand._center, arm._euler[1], -15);
-            left_hand.addChildClass(arm);
+            arm.rotate(left_handDorami._center, arm._euler[0], 90);
+            arm.rotate(left_handDorami._center, arm._euler[1], -15);
+            left_handDorami.addChildClass(arm);
         }
 
-        public void makeFoot()
+        public void makeFootDorami()
         {
             //right foot
-            right_foot = new Asset3d();
-            right_foot.createEllipsoid2(0.2f, 0.1f, 0.2f, 0.2f, -0.75f, 0.0f, 300, 100);
-            right_foot.setColor(new Vector3(211, 211, 211));
+            right_footDorami = new Asset3d();
+            right_footDorami.createEllipsoid2(0.2f, 0.1f, 0.2f, 0.2f, -0.75f, 0.0f, 300, 100);
+            right_footDorami.setColor(new Vector3(211, 211, 211));
             //right leg
             Asset3d leg = new Asset3d();
             leg.createHalfBall(0.15f, 0.4f, 0.15f, 0.2f, -0.7f, 0.0f, 800, 2000);
             leg.setColor(new Vector3(255, 200, 59));
-            right_foot.addChildClass(leg);
+            right_footDorami.addChildClass(leg);
 
             //left foot
-            left_foot = new Asset3d();
-            left_foot.createEllipsoid2(0.2f, 0.1f, 0.2f, -0.2f, -0.75f, 0.0f, 300, 100);
-            left_foot.setColor(new Vector3(211, 211, 211));
+            left_footDorami = new Asset3d();
+            left_footDorami.createEllipsoid2(0.2f, 0.1f, 0.2f, -0.2f, -0.75f, 0.0f, 300, 100);
+            left_footDorami.setColor(new Vector3(211, 211, 211));
             //left leg
             leg = new Asset3d();
             leg.createHalfBall(0.15f, 0.4f, 0.15f, -0.2f, -0.7f, 0.0f, 800, 2000);
             leg.setColor(new Vector3(255, 200, 59));
-            right_foot.addChildClass(leg);
+            left_footDorami.addChildClass(leg);
+        }
+
+        public void makeDorami()
+        {
+            makeHeadDorami();
+            makebodyDorami();
+            makeHandDorami();
+            makeFootDorami();
+
+            main_headDorami.translateObject(0.5f);
+            bodyDorami.translateObject(-0.15f);
+            right_handDorami.translateObject(0.15f);
+
+            dorami.addChildClass(main_headDorami);
+            dorami.addChildClass(bodyDorami);
+            dorami.addChildClass(right_handDorami);
+            dorami.addChildClass(left_handDorami);
+            dorami.addChildClass(right_footDorami);
+            dorami.addChildClass(left_footDorami);
+
+            dorami.translateAll(-2, 0, 0);
+        }
+
+        bool plus_dorami = true;
+        float rotate_dorami = 0;
+        float rotdeg_dorami = 1;
+        float totalRot_dorami = 20;
+
+        public void animateDorami()
+        {
+            if (rotate_dorami >= 0 && rotate_dorami < totalRot_dorami)
+            {
+                plus_dorami = true;
+            }
+            else
+            {
+                //first checking after rotate_dorami is equal to total rotation (totalRot)
+                if (plus_dorami)
+                {
+                    rotate_dorami = -1;
+                }
+
+                if (rotate_dorami > (-1 * totalRot_dorami - 1))
+                {
+                    plus_dorami = false;
+                }
+                else
+                {
+                    rotate_dorami = 0;
+                    plus_dorami = true;
+                }
+            }
+            if (plus_dorami)
+            {
+                dorami.Child[2].rotate(dorami._center, dorami.Child[2]._euler[2], rotdeg_dorami * -1);
+                rotate_dorami += rotdeg_dorami;
+            }
+            else
+            {
+                dorami.Child[2].rotate(dorami._center, dorami.Child[2]._euler[2], rotdeg_dorami);
+                rotate_dorami -= rotdeg_dorami;
+            }
         }
 
         protected override void OnLoad()
@@ -380,36 +309,21 @@ namespace Pert1
             base.OnLoad();
             //Background 
 
-            makeHead();
-            makeBody();
-            makeHand();
-            makeFoot();
-            
+            makeDorami();
+
+            _camera = new Camera(new Vector3(0, 0, 2), Size.X / Size.Y);
+            CursorGrabbed = true;
             //cone = new Asset3d();
             //cone.createHalfBall(0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.5f, 800, 2000);
             //cone.setColor(new Vector3(255, 0, 0));
-
-            main_head.load(Constant.PATH + "shader.vert", Constant.PATH + "shader.frag", Size.X, Size.Y);
-            body.load(Constant.PATH + "shader.vert", Constant.PATH + "shader.frag", Size.X, Size.Y);
-            right_hand.load(Constant.PATH + "shader.vert", Constant.PATH + "shader.frag", Size.X, Size.Y);
-            left_hand.load(Constant.PATH + "shader.vert", Constant.PATH + "shader.frag", Size.X, Size.Y);
-            right_foot.load(Constant.PATH + "shader.vert", Constant.PATH + "shader.frag", Size.X, Size.Y);
-            left_foot.load(Constant.PATH + "shader.vert", Constant.PATH + "shader.frag", Size.X, Size.Y);
+            dorami.load(Constant.PATH + "shader.vert", Constant.PATH + "shader.frag", Size.X, Size.Y);
             //cone.load(Constant.PATH + "shader.vert", Constant.PATH + "shader.frag", Size.X, Size.Y);
             //cam.addChildClass(cone);
-            main_head.translateObject(0.5f);
-            body.translateObject(-0.15f);
-            cam.addChildClass(main_head);
-            cam.addChildClass(body);
-            cam.addChildClass(right_hand);
-            cam.addChildClass(left_hand);
-            cam.addChildClass(right_foot);
-            cam.addChildClass(left_foot);
+            cam.addChildClass(dorami);
 
             GL.GetInteger(GetPName.MaxVertexAttribs, out int maxAttributeCount);
             Console.WriteLine($"Maximum number of vertex attributes supported : {maxAttributeCount}");
         }
-
         protected override void OnRenderFrame(FrameEventArgs args)
         {
             base.OnRenderFrame(args);
@@ -417,14 +331,8 @@ namespace Pert1
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             _time += 9.0 * args.Time;
             Matrix4 temp = Matrix4.Identity;
-            //main_head.rotate(main_head._center, main_head._euler[1], 1);
-            //smile.rotate(main_head._center, main_head._euler[2], 180);
-            main_head.render(3, temp);
-            body.render(3, temp);
-            right_hand.render(3, temp);
-            left_hand.render(3, temp);
-            right_foot.render(3, temp);
-            left_foot.render(3, temp);
+            animateDorami();
+            dorami.render(3, temp, _camera.GetViewMatrix(), _camera.GetProjectionMatrix());
             SwapBuffers();
         }
 
@@ -432,18 +340,21 @@ namespace Pert1
         {
             base.OnResize(e);
             GL.Viewport(0, 0, Size.X, Size.Y);
+            _camera.AspectRatio = Size.X / (float)Size.Y;
+        }
+
+        protected override void OnMouseWheel(MouseWheelEventArgs e)
+        {
+            base.OnMouseWheel(e);
+            _camera.Fov = _camera.Fov - e.OffsetY;
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
             base.OnUpdateFrame(args);
-            if (KeyboardState.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.Escape))
+            if (KeyboardState.IsKeyDown(Keys.Escape))
             {
                 Close();
-            }
-            if (KeyboardState.IsKeyReleased(OpenTK.Windowing.GraphicsLibraryFramework.Keys.A))
-            {
-                Console.Write("Hello Glenn \n");
             }
             if (KeyboardState.IsKeyDown(Keys.Up))
             {
@@ -469,6 +380,115 @@ namespace Pert1
             {
                 cam.rotate(cam._center, cam._euler[2], 5);
             }
+
+            float cameraSpeed = 0.5f;
+            if (KeyboardState.IsKeyDown(Keys.W))
+            {
+                _camera.Position += _camera.Front * cameraSpeed * (float)args.Time;
+            }
+            if (KeyboardState.IsKeyDown(Keys.S))
+            {
+                _camera.Position -= _camera.Front * cameraSpeed * (float)args.Time;
+            }
+            if (KeyboardState.IsKeyDown(Keys.A))
+            {
+                _camera.Position -= _camera.Right * cameraSpeed * (float)args.Time;
+            }
+            if (KeyboardState.IsKeyDown(Keys.D))
+            {
+                _camera.Position += _camera.Right * cameraSpeed * (float)args.Time;
+            }
+            if (KeyboardState.IsKeyDown(Keys.Space))
+            {
+                _camera.Position += _camera.Up * cameraSpeed * (float)args.Time;
+            }
+            if (KeyboardState.IsKeyDown(Keys.LeftShift))
+            {
+                _camera.Position -= _camera.Up * cameraSpeed * (float)args.Time;
+            }
+
+            if (KeyboardState.IsKeyDown(Keys.N))
+            {
+                var axis = new Vector3(0, 1, 0);
+                _camera.Position -= _objectPos;
+                _camera.Position = Vector3.Transform(
+                    _camera.Position,
+                    generateArbRotationMatrix(axis, _objectPos, _rotationSpeed)
+                    .ExtractRotation());
+                _camera.Position += _objectPos;
+                _camera._front = -Vector3.Normalize(_camera.Position
+                    - _objectPos);
+            }
+            if (KeyboardState.IsKeyDown(Keys.Comma))
+            {
+                var axis = new Vector3(0, 1, 0);
+                _camera.Position -= _objectPos;
+                _camera.Yaw -= _rotationSpeed;
+                _camera.Position = Vector3.Transform(_camera.Position,
+                    generateArbRotationMatrix(axis, _objectPos, -_rotationSpeed)
+                    .ExtractRotation());
+                _camera.Position += _objectPos;
+
+                _camera._front = -Vector3.Normalize(_camera.Position - _objectPos);
+            }
+            if (KeyboardState.IsKeyDown(Keys.K))
+            {
+                var axis = new Vector3(1, 0, 0);
+                _camera.Position -= _objectPos;
+                _camera.Pitch -= _rotationSpeed;
+                _camera.Position = Vector3.Transform(_camera.Position,
+                    generateArbRotationMatrix(axis, _objectPos, _rotationSpeed).ExtractRotation());
+                _camera.Position += _objectPos;
+                _camera._front = -Vector3.Normalize(_camera.Position - _objectPos);
+            }
+            if (KeyboardState.IsKeyDown(Keys.M))
+            {
+                var axis = new Vector3(1, 0, 0);
+                _camera.Position -= _objectPos;
+                _camera.Pitch += _rotationSpeed;
+                _camera.Position = Vector3.Transform(_camera.Position,
+                    generateArbRotationMatrix(axis, _objectPos, -_rotationSpeed).ExtractRotation());
+                _camera.Position += _objectPos;
+                _camera._front = -Vector3.Normalize(_camera.Position - _objectPos);
+            }
+
+            var mouse = MouseState;
+            var sensitivity = 0.2f;
+
+            if (_firstMove)
+            {
+                _lastPos = new Vector2(mouse.X, mouse.Y);
+                _firstMove = false;
+            }
+            else
+            {
+                var deltaX = mouse.X - _lastPos.X;
+                var deltaY = mouse.Y - _lastPos.Y;
+                _lastPos = new Vector2(mouse.X, mouse.Y);
+                _camera.Yaw += deltaX * sensitivity;
+                _camera.Pitch -= deltaY * sensitivity;
+            }
+        }
+
+        public Matrix4 generateArbRotationMatrix(Vector3 axis, Vector3 center, float degree)
+        {
+            var rads = MathHelper.DegreesToRadians(degree);
+
+            var secretFormula = new float[4, 4] {
+                { (float)Math.Cos(rads) + (float)Math.Pow(axis.X, 2) * (1 - (float)Math.Cos(rads)), axis.X* axis.Y * (1 - (float)Math.Cos(rads)) - axis.Z * (float)Math.Sin(rads),    axis.X * axis.Z * (1 - (float)Math.Cos(rads)) + axis.Y * (float)Math.Sin(rads),   0 },
+                { axis.Y * axis.X * (1 - (float)Math.Cos(rads)) + axis.Z * (float)Math.Sin(rads),   (float)Math.Cos(rads) + (float)Math.Pow(axis.Y, 2) * (1 - (float)Math.Cos(rads)), axis.Y * axis.Z * (1 - (float)Math.Cos(rads)) - axis.X * (float)Math.Sin(rads),   0 },
+                { axis.Z * axis.X * (1 - (float)Math.Cos(rads)) - axis.Y * (float)Math.Sin(rads),   axis.Z * axis.Y * (1 - (float)Math.Cos(rads)) + axis.X * (float)Math.Sin(rads),   (float)Math.Cos(rads) + (float)Math.Pow(axis.Z, 2) * (1 - (float)Math.Cos(rads)), 0 },
+                { 0, 0, 0, 1}
+            };
+            var secretFormulaMatix = new Matrix4
+            (
+                new Vector4(secretFormula[0, 0], secretFormula[0, 1], secretFormula[0, 2], secretFormula[0, 3]),
+                new Vector4(secretFormula[1, 0], secretFormula[1, 1], secretFormula[1, 2], secretFormula[1, 3]),
+                new Vector4(secretFormula[2, 0], secretFormula[2, 1], secretFormula[2, 2], secretFormula[2, 3]),
+                new Vector4(secretFormula[3, 0], secretFormula[3, 1], secretFormula[3, 2], secretFormula[3, 3])
+            );
+
+            return secretFormulaMatix;
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
