@@ -28,8 +28,8 @@ namespace Pert1
         int _vertexArrayObject;
         int _elementBufferObject;
         Shader _shader;
-        Matrix4 _view; //camera
-        Matrix4 _projection; //settingan camera
+        //Matrix4 _view; //camera
+        //Matrix4 _projection; //settingan camera
         Matrix4 _model; //Merubah transformasi
         Vector3 _color; //coloring
         public Vector3 _center;
@@ -103,16 +103,16 @@ namespace Pert1
             _shader = new Shader(shaderVert, shaderFrag);
             _shader.Use();
 
-            _view = Matrix4.CreateTranslation(0f, 0f, -3.0f);
+            //_view = Matrix4.CreateTranslation(0f, 0f, -3.0f);
 
-            _projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45f), Size_x / (float)Size_y, 0.1f, 100.0f);
+            //_projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45f), Size_x / (float)Size_y, 0.1f, 100.0f);
             foreach (var i in Child)
             {
                 i.load(shaderVert, shaderFrag, Size_x, Size_y);
             }
         }
 
-        public void render(int _lines, Matrix4 temp)
+        public void render(int _lines, Matrix4 temp, Matrix4 camera_view, Matrix4 camera_projection)
         {
             _shader.Use();
             GL.BindVertexArray(_vertexArrayObject);
@@ -120,8 +120,8 @@ namespace Pert1
 
             _shader.SetVector3("ourColor", _color);
             _shader.SetMatrix4("model", _model);
-            _shader.SetMatrix4("view", _view);
-            _shader.SetMatrix4("projection", _projection);
+            _shader.SetMatrix4("view", camera_view);
+            _shader.SetMatrix4("projection", camera_projection);
 
             if (_indices.Count != 0)
             {
@@ -152,7 +152,7 @@ namespace Pert1
             }
             foreach (var i in Child)
             {
-                i.render(_lines, temp);
+                i.render(_lines, temp, camera_view, camera_projection);
             }
         }
         public Vector3 getRotationResult(Vector3 pivot, Vector3 vector, float angle, Vector3 point, bool isEuler = false)
@@ -471,6 +471,23 @@ namespace Pert1
             }
         }
 
+        public void EllipCone2(float radius_x, float radius_y, float radius_z, float _x,
+        float _y, float _z)
+        {
+            float pi = (float)Math.PI;
+            Vector3 temp_vector;
+            for (float u = -pi; u <= pi; u += pi / 720)
+            {
+                for (float v = -pi / 2; v <= pi / 2; v += pi / 720)
+                {
+                    temp_vector.X = _x + (float)v * (float)Math.Cos(u) * radius_x;
+                    temp_vector.Y = _y + (float)v * (float)Math.Sin(u) * radius_y;
+                    temp_vector.Z = _z + (float)v * radius_z;
+                    _vertices.Add(temp_vector);
+                }
+            }
+        }
+
         public void HyperPara(float radius_x, float radius_y, float radius_z, float _x,
         float _y, float _z)
         {
@@ -564,6 +581,10 @@ namespace Pert1
             {
                 i._model *= Matrix4.CreateTranslation(0, y, 0);
             }
+        }
+        public void translateAll(float x, float y, float z)
+        {
+            _model *= Matrix4.CreateTranslation(x, y, z);
         }
 
         public void translateObject(float x, float y, float z)
