@@ -58,7 +58,7 @@ namespace Pert1
         //int _vertexArrayObject;
         //int _elementBufferObject;
         //Shader _shader;
-        Asset3d[] _object3d = new Asset3d[20];
+        Asset3d[] _object3dDorami = new Asset3d[20];
         Asset3d bodyDorami;
         Asset3d main_headDorami;
         Asset3d cone;
@@ -67,7 +67,7 @@ namespace Pert1
         Asset3d right_footDorami;
         Asset3d left_footDorami;
         Asset3d cam = new Asset3d();
-        Camera _camera;
+        Camera _camera; 
         bool _firstMove = true;
         Vector2 _lastPos;
         Vector3 _objectPos = new Vector3(0.0f, 0.0f, 0.0f);
@@ -86,49 +86,49 @@ namespace Pert1
         {
             //Ganti Background
             GL.ClearColor(0f, 0f, 0f, 1.0f);
-            _object3d[0] = new Asset3d();
+            _object3dDorami[0] = new Asset3d();
             bodyDorami = new Asset3d();
 
             //Badan
-            _object3d[0] = new Asset3d();
-            _object3d[0].createEllipsoid2(0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 300, 100);
-            _object3d[0].setColor(new Vector3(255, 228, 59));
-            bodyDorami.addChildClass(_object3d[0]);
+            _object3dDorami[0] = new Asset3d();
+            _object3dDorami[0].createEllipsoid2(0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 300, 100);
+            _object3dDorami[0].setColor(new Vector3(255, 228, 59));
+            bodyDorami.addChildClass(_object3dDorami[0]);
 
             //Outline Kantong
-            _object3d[3] = new Asset3d();
-            _object3d[3].createHalfBall(0.3f, 0.3f, 0.03f, 0.0f, -0.15f, 0.475f, 800, 2000);
-            _object3d[3].rotate(_object3d[0]._center, _object3d[0]._euler[2], 180);
-            _object3d[3].rotate(_object3d[0]._center, _object3d[0]._euler[0], 10);
-            _object3d[3].setColor(new Vector3(0, 0, 0));
-            bodyDorami.addChildClass(_object3d[3]);
+            _object3dDorami[3] = new Asset3d();
+            _object3dDorami[3].createHalfBall(0.3f, 0.3f, 0.03f, 0.0f, -0.15f, 0.475f, 800, 2000);
+            _object3dDorami[3].rotate(_object3dDorami[0]._center, _object3dDorami[0]._euler[2], 180);
+            _object3dDorami[3].rotate(_object3dDorami[0]._center, _object3dDorami[0]._euler[0], 10);
+            _object3dDorami[3].setColor(new Vector3(0, 0, 0));
+            bodyDorami.addChildClass(_object3dDorami[3]);
 
             //kantong
-            _object3d[4] = new Asset3d();
-            _object3d[4].createHalfBall(0.28f, 0.28f, 0.0f, 0.0f, -0.2f, 0.5f, 800, 2000);
-            _object3d[4].rotate(_object3d[0]._center, _object3d[0]._euler[2], 180);
-            _object3d[4].rotate(_object3d[0]._center, _object3d[0]._euler[0], 15);
-            _object3d[4].setColor(new Vector3(255, 255, 255));
-            bodyDorami.addChildClass(_object3d[4]);
+            _object3dDorami[4] = new Asset3d();
+            _object3dDorami[4].createHalfBall(0.28f, 0.28f, 0.0f, 0.0f, -0.2f, 0.5f, 800, 2000);
+            _object3dDorami[4].rotate(_object3dDorami[0]._center, _object3dDorami[0]._euler[2], 180);
+            _object3dDorami[4].rotate(_object3dDorami[0]._center, _object3dDorami[0]._euler[0], 15);
+            _object3dDorami[4].setColor(new Vector3(255, 255, 255));
+            bodyDorami.addChildClass(_object3dDorami[4]);
 
             //kalung lonceng
-            _object3d[5] = new Asset3d();
-            _object3d[5].createEllipsoid2(0.5f, 0.08f, 0.5f, 0.0f, 0.29f, 0.0f, 300, 100);
-            _object3d[5].setColor(new Vector3(2, 160, 231));
-            bodyDorami.addChildClass(_object3d[5]);
+            _object3dDorami[5] = new Asset3d();
+            _object3dDorami[5].createEllipsoid2(0.5f, 0.08f, 0.5f, 0.0f, 0.29f, 0.0f, 300, 100);
+            _object3dDorami[5].setColor(new Vector3(2, 160, 231));
+            bodyDorami.addChildClass(_object3dDorami[5]);
 
 
             //bg lonceng
-            _object3d[6] = new Asset3d();
-            _object3d[6].createEllipsoid2(0.11f, 0.01f, 0.11f, 0.0f, 0.19f, 0.55f, 300, 100);
-            _object3d[6].setColor(new Vector3(255, 165, 0));
-            bodyDorami.addChildClass(_object3d[6]);
+            _object3dDorami[6] = new Asset3d();
+            _object3dDorami[6].createEllipsoid2(0.11f, 0.01f, 0.11f, 0.0f, 0.19f, 0.55f, 300, 100);
+            _object3dDorami[6].setColor(new Vector3(255, 165, 0));
+            bodyDorami.addChildClass(_object3dDorami[6]);
 
             //Lonceng
-            _object3d[7] = new Asset3d();
-            _object3d[7].createEllipsoid2(0.1f, 0.1f, 0.1f, 0.0f, 0.19f, 0.55f, 300, 100);
-            _object3d[7].setColor(new Vector3(255, 255, 0));
-            bodyDorami.addChildClass(_object3d[7]);
+            _object3dDorami[7] = new Asset3d();
+            _object3dDorami[7].createEllipsoid2(0.1f, 0.1f, 0.1f, 0.0f, 0.19f, 0.55f, 300, 100);
+            _object3dDorami[7].setColor(new Vector3(255, 255, 0));
+            bodyDorami.addChildClass(_object3dDorami[7]);
         }
 
         public void makeHeadDorami()
@@ -196,7 +196,7 @@ namespace Pert1
         {
             //right hand
             right_handDorami = new Asset3d();
-            right_handDorami.createEllipsoid2(0.12f, 0.12f, 0.12f, 0.55f, 0.3f, 0.0f, 300, 100);
+            right_handDorami.createEllipsoid2(0.12f, 0.12f, 0.12f, 0.55f, 0.3f, 0f, 300, 100);
             right_handDorami.setColor(new Vector3(211, 211, 211));
             //right arm
             Asset3d arm = new Asset3d();
@@ -208,13 +208,13 @@ namespace Pert1
 
             //left hand
             left_handDorami = new Asset3d();
-            left_handDorami.createEllipsoid2(0.12f, 0.12f, 0.12f, -0.55f, -0.3f, 0.0f, 300, 100);
+            left_handDorami.createEllipsoid2(0.12f, 0.12f, 0.12f, -0.55f, 0.3f, 0.0f, 300, 100);
             left_handDorami.setColor(new Vector3(211, 211, 211));
             //left arm
             arm = new Asset3d();
             arm.EllipPara(0.011f, 0.011f, 0.004f, -0.45f, 0f, 0f);
             arm.setColor(new Vector3(255, 200, 59));
-            arm.rotate(left_handDorami._center, arm._euler[0], 90);
+            arm.rotate(left_handDorami._center, arm._euler[0], 270);
             arm.rotate(left_handDorami._center, arm._euler[1], -15);
             left_handDorami.addChildClass(arm);
         }
@@ -249,9 +249,12 @@ namespace Pert1
             makeHandDorami();
             makeFootDorami();
 
-            main_headDorami.translateObject(0.5f);
-            bodyDorami.translateObject(-0.15f);
-            right_handDorami.translateObject(0.15f);
+            main_headDorami.translateObject(-2f, 0.5f, 0);
+            bodyDorami.translateObject(-2f, -0.15f, 0);
+            right_handDorami.translateObject(-2f, 0, 0);
+            left_handDorami.translateObject(-2f, -0.1f, 0);
+            right_footDorami.translateObject(-2f, 0, 0);
+            left_footDorami.translateObject(-2f, 0, 0);
 
             dorami.addChildClass(main_headDorami);
             dorami.addChildClass(bodyDorami);
@@ -260,13 +263,13 @@ namespace Pert1
             dorami.addChildClass(right_footDorami);
             dorami.addChildClass(left_footDorami);
 
-            dorami.translateAll(-2, 0, 0);
+            
         }
 
         bool plus_dorami = true;
         float rotate_dorami = 0;
         float rotdeg_dorami = 1;
-        float totalRot_dorami = 20;
+        float totalRot_dorami = 10;
 
         public void animateDorami()
         {
@@ -294,12 +297,14 @@ namespace Pert1
             }
             if (plus_dorami)
             {
-                dorami.Child[2].rotate(dorami._center, dorami.Child[2]._euler[2], rotdeg_dorami * -1);
+                dorami.Child[2].rotate(dorami._center, dorami.Child[2]._euler[2], rotdeg_dorami  * -1);
+                dorami.Child[3].rotate(dorami._center, dorami.Child[2]._euler[2], rotdeg_dorami * -1);
                 rotate_dorami += rotdeg_dorami;
             }
             else
             {
                 dorami.Child[2].rotate(dorami._center, dorami.Child[2]._euler[2], rotdeg_dorami);
+                dorami.Child[3].rotate(dorami._center, dorami.Child[2]._euler[2], rotdeg_dorami);
                 rotate_dorami -= rotdeg_dorami;
             }
         }
