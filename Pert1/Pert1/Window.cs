@@ -61,7 +61,6 @@ namespace Pert1
         Asset3d[] _object3dDorami = new Asset3d[20];
         Asset3d bodyDorami;
         Asset3d main_headDorami;
-        Asset3d cone;
         Asset3d right_handDorami;
         Asset3d left_handDorami;
         Asset3d right_footDorami;
